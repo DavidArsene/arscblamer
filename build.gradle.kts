@@ -1,5 +1,6 @@
 plugins {
     id("java-library")
+    id("maven-publish")
 }
 
 java {
@@ -18,4 +19,17 @@ dependencies {
     annotationProcessor("com.google.auto.value:auto-value:+")
 
     compileOnly("org.checkerframework:checker-compat-qual:+")
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.github.DavidArsene"
+            artifactId = "arscblamer"
+
+            afterEvaluate {
+                from(components["java"])
+            }
+        }
+    }
 }
