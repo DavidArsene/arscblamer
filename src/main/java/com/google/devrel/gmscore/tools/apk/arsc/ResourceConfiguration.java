@@ -795,10 +795,8 @@ public abstract class ResourceConfiguration implements SerializableResource {
   }
 
   private <K, V> V getOrDefault(Map<K, V> map, K key, V defaultValue) {
-    // TODO(acornwall): Remove this when Java 8's Map#getOrDefault is available.
     // Null is not returned, even if the map contains a key whose value is null. This is intended.
-    V value = map.get(key);
-    return value != null ? value : defaultValue;
+    return map.getOrDefault(key, defaultValue);
   }
 
   /** Provides a builder for creating {@link ResourceConfiguration} instances. */

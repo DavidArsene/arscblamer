@@ -16,7 +16,6 @@
 
 package com.google.devrel.gmscore.tools.apk.arsc;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.nio.ByteBuffer;
 
 final class UtfUtil {
@@ -34,7 +33,6 @@ final class UtfUtil {
 
   // This is a Javafied version of the implementation in ART:
   // cs/android/art/libdexfile/dex/utf-inl.h?l=32&rcl=4da82e1e9f201cb0e408499ee3b38cbca575698e
-  @VisibleForTesting
   static int decodeUtf8OrModifiedUtf8CodePoint(ByteBuffer in, char[] out, int offset) {
     byte one = in.get();
     if ((one & 0x80) == 0) {

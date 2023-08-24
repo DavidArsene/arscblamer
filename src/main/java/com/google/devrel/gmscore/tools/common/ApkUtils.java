@@ -8,14 +8,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -186,23 +183,5 @@ public final class ApkUtils {
       }
     }
     return files;
-  }
-
-  /**
-   * Writes a file to an apk. If the file already exists, it is overwritten.
-   *
-   * @param apkFile The file containing the apk zip archive.
-   * @param filename The path of the file to write. e.g. /foo/bar.txt.
-   * @param data The file data that will be written.
-   * @throws IOException Thrown if the apk could not be written to.
-   */
-  public static void writeFile(File apkFile, String filename, byte[] data) throws IOException {
-    try (FileSystem zipfs = FileSystems.newFileSystem(Paths.get(apkFile.getPath()), null)) {
-      Files.write(
-          zipfs.getPath(filename),
-          data,
-          StandardOpenOption.TRUNCATE_EXISTING,
-          StandardOpenOption.CREATE);
-    }
   }
 }

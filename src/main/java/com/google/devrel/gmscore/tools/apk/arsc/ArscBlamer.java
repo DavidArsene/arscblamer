@@ -21,7 +21,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,7 +75,6 @@ public class ArscBlamer {
    *
    * @param resourceTable The resources.arsc resource table to blame.
    */
-  @Inject
   public ArscBlamer(ResourceTableChunk resourceTable) {
     this.resourceTable = resourceTable;
     this.stringToBlame = createEntryListArray(resourceTable.getStringPool().getStringCount());
@@ -138,9 +136,7 @@ public class ArscBlamer {
     if (resourceValue != null) {
       values.add(resourceValue);
     }
-    for (ResourceValue value : entry.values().values()) {
-      values.add(value);
-    }
+    values.addAll(entry.values().values());
     return values;
   }
 
@@ -212,9 +208,7 @@ public class ArscBlamer {
     }
     List<TypeChunk> result = new ArrayList<>();
     for (PackageChunk packageChunk : resourceTable.getPackages()) {
-      for (TypeChunk typeChunk : packageChunk.getTypeChunks()) {
-        result.add(typeChunk);
-      }
+      result.addAll(packageChunk.getTypeChunks());
     }
     typeChunks = result;
     return result;
