@@ -1,11 +1,15 @@
 plugins {
     id("java-library")
     id("maven-publish")
+    kotlin("jvm") version "1.9.10"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+}
+kotlin.compilerOptions {
+    jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 }
 
 repositories {
@@ -13,12 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.google.guava:guava:+")
-
-    compileOnly("com.google.auto.value:auto-value-annotations:+")
-    annotationProcessor("com.google.auto.value:auto-value:+")
-
-    compileOnly("org.checkerframework:checker-compat-qual:+")
+    implementation(kotlin("stdlib"))
 }
 
 publishing {

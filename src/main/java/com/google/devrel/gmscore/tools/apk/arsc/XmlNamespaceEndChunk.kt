@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.devrel.gmscore.tools.apk.arsc;
+package com.google.devrel.gmscore.tools.apk.arsc
 
-import java.nio.ByteBuffer;
+import java.nio.ByteBuffer
 
-import javax.annotation.Nullable;
+/** Represents the ending tag of a namespace in an XML document. */
+class XmlNamespaceEndChunk(buffer: ByteBuffer, parent: Chunk?) : XmlNamespaceChunk(buffer, parent) {
 
-/** Represents the starting tag of a namespace in an XML document. */
-public final class XmlNamespaceStartChunk extends XmlNamespaceChunk {
-
-  protected XmlNamespaceStartChunk(ByteBuffer buffer, @Nullable Chunk parent) {
-    super(buffer, parent);
-  }
-
-  @Override
-  protected Type getType() {
-    return Chunk.Type.XML_START_NAMESPACE;
-  }
+    override fun getType() = Type.XML_END_NAMESPACE
 }
