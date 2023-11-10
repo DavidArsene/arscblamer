@@ -46,6 +46,12 @@ data class BinaryResourceIdentifier(
         check(entryId and 0xFFFF == entryId) { "entryId must be <= 0xFFFF." }
     }
 
+    /** The resource id of the form `0xpptteeee`. */
+    val resourceId: Int
+        get() = packageId shl PACKAGE_ID_SHIFT or (typeId shl TYPE_ID_SHIFT) or entryId
+
+    override fun toString() = "0x%08x".format(resourceId)
+
     companion object {
         /** The [PackageChunk] id mask for a packed resource id of the form `0xpptteeee`. */
         private const val PACKAGE_ID_MASK = -0x1000000
