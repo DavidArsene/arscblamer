@@ -21,7 +21,7 @@ package com.google.devrel.gmscore.tools.apk.arsc
  * [PackageChunk] id, `tt` is the [TypeChunk] id, and `eeee` is the index of the entry in
  * the [TypeChunk].
  */
-data class ResourceIdentifier(
+data class BinaryResourceIdentifier(
 
     /** The (1-based) id of the [PackageChunk] containing this resource. */
     val packageId: Int,
@@ -33,7 +33,7 @@ data class ResourceIdentifier(
     val entryId: Int
 ) {
 
-    /** Returns a [ResourceIdentifier] from a `resourceId` of the form `0xpptteeee`. */
+    /** Returns a [BinaryResourceIdentifier] from a `resourceId` of the form `0xpptteeee`. */
     constructor(resourceId: Int) : this(
         packageId = resourceId and PACKAGE_ID_MASK ushr PACKAGE_ID_SHIFT,
         typeId = resourceId and TYPE_ID_MASK ushr TYPE_ID_SHIFT,

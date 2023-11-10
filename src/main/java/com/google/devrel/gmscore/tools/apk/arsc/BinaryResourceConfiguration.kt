@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets
 
 /** Describes a particular resource configuration. */
 @Suppress("EqualsOrHashCode", "ArrayInDataClass")
-data class ResourceConfiguration(
+data class BinaryResourceConfiguration(
 
     /** The size of this resource configuration in bytes. */
     val size: Int,
@@ -73,7 +73,7 @@ data class ResourceConfiguration(
 ) : SerializableResource() {
 
     /**
-     * The different types of configs that can be present in a [ResourceConfiguration].
+     * The different types of configs that can be present in a [BinaryResourceConfiguration].
      *
      * The ordering of these types is roughly the same as `#isBetterThan`, but is not
      * guaranteed to be the same.
@@ -156,7 +156,7 @@ data class ResourceConfiguration(
     val colorModeHdr: Int
         get() = colorMode and COLOR_MODE_HDR_MASK
 
-    /** Returns a [ResourceConfiguration] with sane default properties. */
+    /** Returns a [BinaryResourceConfiguration] with sane default properties. */
     constructor() : this(
         size = SIZE,
         mcc = 0,
@@ -344,7 +344,7 @@ data class ResourceConfiguration(
     /**
      * Returns a map of the configuration parts for [toString].
      *
-     * If a configuration part is not defined for this [ResourceConfiguration], its value
+     * If a configuration part is not defined for this [BinaryResourceConfiguration], its value
      * will be the empty string.
      */
     fun toStringParts() = linkedMapOf( // Preserve order for #toString().
@@ -379,7 +379,7 @@ data class ResourceConfiguration(
     // Ignore size and unknown when checking equality
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is ResourceConfiguration) return false
+        if (other !is BinaryResourceConfiguration) return false
 
         return mcc == other.mcc &&
             mnc == other.mnc &&
@@ -411,7 +411,7 @@ data class ResourceConfiguration(
          * The default configuration. This configuration acts as a "catch-all" for looking up resources
          * when no better configuration can be found.
          */
-        val DEFAULT = ResourceConfiguration()
+        val DEFAULT = BinaryResourceConfiguration()
 
         // The below constants are from android.content.res.Configuration.
 
@@ -585,7 +585,7 @@ data class ResourceConfiguration(
             UI_MODE_TYPE_VR_HEADSET to "vrheadset"
         )
 
-        /** The minimum size in bytes that a [ResourceConfiguration] can be. */
+        /** The minimum size in bytes that a [BinaryResourceConfiguration] can be. */
         private const val MIN_SIZE = 28
 
         /** The minimum size in bytes that this configuration must be to contain screen config info. */

@@ -51,9 +51,9 @@ class XmlResourceMapChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, pa
      * Returns the resource ID that `attributeId` maps to iff [hasResourceId] returns
      * true for the given `attributeId`.
      */
-    fun getResourceId(attributeId: Int): ResourceIdentifier {
+    fun getResourceId(attributeId: Int): BinaryResourceIdentifier {
         check(hasResourceId(attributeId)) { "Attribute ID is not a valid index." }
-        return ResourceIdentifier(resources[attributeId])
+        return BinaryResourceIdentifier(resources[attributeId])
     }
 
     /** Returns true if a resource ID exists for the given `attributeId`. */

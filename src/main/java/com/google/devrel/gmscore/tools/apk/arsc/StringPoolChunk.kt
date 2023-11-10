@@ -56,7 +56,7 @@ class StringPoolChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent
                 alwaysDedup = true
             }
             previousOffset = stringOffset
-            ResourceString.decodeString(buffer, stringOffset, stringType)
+            BinaryResourceString.decodeString(buffer, stringOffset, stringType)
         }
     }
     /**
@@ -195,8 +195,8 @@ class StringPoolChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent
     fun getStyleCount() = styles.size
 
     /** Returns the type of strings in this pool. */
-    val stringType: ResourceString.Type
-        get() = if (isUTF8) ResourceString.Type.UTF8 else ResourceString.Type.UTF16
+    val stringType: BinaryResourceString.Type
+        get() = if (isUTF8) BinaryResourceString.Type.UTF8 else BinaryResourceString.Type.UTF16
 
     override fun getType() = Type.STRING_POOL
 
@@ -230,7 +230,7 @@ class StringPoolChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent
             if (shouldShrink && used.containsKey(string)) {
                 offsets.putInt(used[string] ?: 0)
             } else {
-                val encodedString = ResourceString.encodeString(string, stringType)
+                val encodedString = BinaryResourceString.encodeString(string, stringType)
                 payload.write(encodedString)
                 used[string] = stringOffset
                 offsets.putInt(stringOffset)
@@ -246,7 +246,7 @@ class StringPoolChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent
     private fun writeStyles(payload: DataOutput, offsets: ByteBuffer, options: Int): Int {
         var styleOffset = 0
         val shouldShrink = options and SHRINK != 0 || alwaysDedup
-        if (styles.size > 0) {
+        if (styles.isNotEmpty()) {
             val used: MutableMap<StringPoolStyle, Int> = HashMap() // Keeps track of bytes already written
             for (style in styles) {
                 if (shouldShrink && used.containsKey(style)) {

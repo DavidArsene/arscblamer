@@ -16,9 +16,9 @@
 
 package com.google.devrel.gmscore.tools.apk.arsc
 
-import com.google.devrel.gmscore.tools.common.ApkUtils
 import java.io.File
 import java.io.IOException
+import java.util.zip.ZipFile
 
 /** Utility class for loading a resource table from an `apk`. */
 object ArscUtils {
@@ -27,16 +27,23 @@ object ArscUtils {
 
     /** Get the resources.arsc resource table in the `apk`. */
     @Throws(IOException::class)
-    fun getResourceTable(apk: File): ResourceTableChunk {
-        val resourceBytes = ApkUtils.getFile(apk, RESOURCES_ARSC)
+    fun getResources(apk: File): ResourceTableChunk {
+        val resourceBytes = getFile(apk, RESOURCES_ARSC)
             ?: throw IOException("Unable to find $RESOURCES_ARSC in APK.")
 
-        val chunks = ResourceFile(resourceBytes).chunks
+        val chunks = BinaryResourceFile(resourceBytes).chunks
         check(chunks.size == 1) { "$RESOURCES_ARSC should only have one root chunk." }
 
         val resourceTable = chunks[0]
         check(resourceTable is ResourceTableChunk) { "$RESOURCES_ARSC root chunk must be a ResourceTableChunk." }
 
         return resourceTable
+    }
+
+    private fun getFile(apkFile: File, filename: String): ByteArray? {
+        ZipFile(apkFile).use { apkZip ->
+            val zipEntry = apkZip.getEntry(filename) ?: return null
+            apkZip.getInputStream(zipEntry).use { return it.readAllBytes() }
+        }
     }
 }

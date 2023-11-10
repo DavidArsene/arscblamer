@@ -31,8 +31,8 @@ data class XmlAttribute(
     /** A string reference to a string containing the character value. */
     val rawValueIndex: Int,
 
-    /** A [ResourceValue] instance containing the parsed value. */
-    val typedValue: ResourceValue,
+    /** A [BinaryResourceValue] instance containing the parsed value. */
+    val typedValue: BinaryResourceValue,
 
     /** The parent of this XML attribute; used for dereferencing the namespace and name. */
     val parent: XmlNodeChunk
@@ -40,7 +40,7 @@ data class XmlAttribute(
 
     companion object {
         /** The serialized size in bytes of an [XmlAttribute]. */
-        const val SIZE = 12 + ResourceValue.SIZE
+        const val SIZE = 12 + BinaryResourceValue.SIZE
     }
 
     /**
@@ -53,7 +53,7 @@ data class XmlAttribute(
         namespaceIndex = buffer.getInt(),
         nameIndex = buffer.getInt(),
         rawValueIndex = buffer.getInt(),
-        typedValue = ResourceValue(buffer),
+        typedValue = BinaryResourceValue(buffer),
         parent = parent
     )
 

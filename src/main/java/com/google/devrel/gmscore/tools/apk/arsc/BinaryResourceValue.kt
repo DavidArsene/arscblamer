@@ -20,7 +20,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 /** Represents a single typed resource value. */
-data class ResourceValue(
+data class BinaryResourceValue(
 
     /** The length in bytes of this value. */
     val size: Int,
@@ -89,7 +89,7 @@ data class ResourceValue(
     }
 
     companion object {
-        /** The serialized size in bytes of a [ResourceValue]. */
+        /** The serialized size in bytes of a [BinaryResourceValue]. */
         const val SIZE = 8
     }
 

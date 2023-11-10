@@ -23,7 +23,7 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
 /** Provides utilities to decode/encode a String packed in an arsc resource file. */
-object ResourceString {
+object BinaryResourceString {
 
     /**
      * Given a buffer and an offset into the buffer, returns a String. The `offset` is the
@@ -39,7 +39,7 @@ object ResourceString {
      *
      * @param buffer The buffer containing the string to decode.
      * @param offset Offset into the buffer where the string resides.
-     * @param type The encoding type that the [ResourceString] is encoded in.
+     * @param type The encoding type that the [BinaryResourceString] is encoded in.
      * @return The decoded string.
      */
     fun decodeString(buffer: ByteBuffer, offset: Int, type: Type): String {
@@ -72,7 +72,7 @@ object ResourceString {
      * `03 04 61 62 C2 A9 00`
      *
      * @param str The string to be encoded.
-     * @param type The encoding type that the [ResourceString] should be encoded in.
+     * @param type The encoding type that the [BinaryResourceString] should be encoded in.
      * @return The encoded string.
      */
     fun encodeString(str: String, type: Type): ByteArray {
@@ -146,7 +146,7 @@ object ResourceString {
         return length
     }
 
-    /** Type of [ResourceString] to encode / decode. */
+    /** Type of [BinaryResourceString] to encode / decode. */
     enum class Type(val charset: Charset) {
         UTF8(StandardCharsets.UTF_8),
         UTF16(StandardCharsets.UTF_16LE)

@@ -68,7 +68,7 @@ class ResourceTableChunk(buffer: ByteBuffer, parent: Chunk?) : ChunkWithChunks(b
                         // An isComplex() Entry can have some values of type STRING and others of other types
                         // (e.g. a <style> can have one sub-<item> be a DIMENSION and another sub-<item> be a
                         // STRING) so we need to rewrite such Entry's sub-values independently.
-                        val newValues = TreeMap<Int, ResourceValue>()
+                        val newValues = TreeMap<Int, BinaryResourceValue>()
                         for ((key, value) in chunkEntry.values.entries) {
                             newValues[key] = if (isString(value)) {
                                 val newIndex = remappedIndexes[value.data]
@@ -113,6 +113,6 @@ class ResourceTableChunk(buffer: ByteBuffer, parent: Chunk?) : ChunkWithChunks(b
     companion object {
         private const val HEADER_SIZE = METADATA_SIZE + 4 // +4 = package count
 
-        private fun isString(value: ResourceValue) = value.type === ResourceValue.Type.STRING
+        private fun isString(value: BinaryResourceValue) = value.type === BinaryResourceValue.Type.STRING
     }
 }

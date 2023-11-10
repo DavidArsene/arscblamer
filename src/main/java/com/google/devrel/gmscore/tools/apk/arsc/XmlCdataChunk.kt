@@ -27,8 +27,8 @@ class XmlCdataChunk(buffer: ByteBuffer, parent: Chunk?) : XmlNodeChunk(buffer, p
     /** A string reference to a string containing the raw character data. */
     private val rawValueIndex: Int = buffer.getInt()
 
-    /** A [ResourceValue] instance containing the parsed value. */
-    val resourceValue = ResourceValue(buffer)
+    /** A [BinaryResourceValue] instance containing the parsed value. */
+    val resourceValue = BinaryResourceValue(buffer)
 
     /** Returns a string containing the raw character data of this chunk. */
     val rawValue: String

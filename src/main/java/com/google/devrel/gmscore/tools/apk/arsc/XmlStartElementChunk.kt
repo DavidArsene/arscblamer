@@ -75,8 +75,8 @@ class XmlStartElementChunk(buffer: ByteBuffer, parent: Chunk?) : XmlNodeChunk(bu
         var count = 0
         for (attribute in _attributes) {
             val (_, type, valueData) = attribute.typedValue
-            if (type === ResourceValue.Type.REFERENCE) {
-                if (ResourceIdentifier(valueData).packageId != 0x1) {
+            if (type === BinaryResourceValue.Type.REFERENCE) {
+                if (BinaryResourceIdentifier(valueData).packageId != 0x1) {
                     if (remapping.containsKey(valueData)) {
                         val data = checkNotNull(remapping[valueData])
                         val newAttribute = XmlAttribute(

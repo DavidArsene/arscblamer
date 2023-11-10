@@ -22,7 +22,6 @@ import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.*
-import kotlin.collections.LinkedHashMap
 
 /**
  * Represents a type chunk, which contains the resource values for a specific resource type and
@@ -43,7 +42,7 @@ class TypeChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent) {
         private const val FLAG_SPARSE = 1 shl 0
 
         /** The size of a TypeChunk's header in bytes. */
-        const val HEADER_SIZE = METADATA_SIZE + 12 + ResourceConfiguration.SIZE
+        const val HEADER_SIZE = METADATA_SIZE + 12 + BinaryResourceConfiguration.SIZE
     }
 
     /** The (1-based) type identifier of the resource type this chunk is holding. */
@@ -69,7 +68,7 @@ class TypeChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent) {
     private val entriesStart: Int = buffer.getInt()
 
     /** The resource configuration that these resource entries correspond to. */
-    @JvmField var configuration: ResourceConfiguration = ResourceConfiguration(buffer)
+    @JvmField var configuration: BinaryResourceConfiguration = BinaryResourceConfiguration(buffer)
 
     /** A sparse list of resource entries defined by this chunk. */
     private val _entries: SortedMap<Int, Entry> = TreeMap<Int, Entry>().also {
@@ -121,7 +120,7 @@ class TypeChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent) {
         get() = Collections.unmodifiableSortedMap(_entries)
 
     /** Returns true if this chunk contains an entry for `resourceId`. */
-    fun containsResource(resourceId: ResourceIdentifier): Boolean {
+    fun containsResource(resourceId: BinaryResourceIdentifier): Boolean {
         val packageId = checkNotNull(packageChunk).id
         val typeId = id
         return resourceId.packageId == packageId
@@ -250,7 +249,7 @@ class TypeChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent) {
         output.write(baos.toByteArray())
     }
 
-    /** An [Entry] in a [TypeChunk]. Contains one or more [ResourceValue]. */
+    /** An [Entry] in a [TypeChunk]. Contains one or more [BinaryResourceValue]. */
     data class Entry(
 
         /** Number of bytes in the header of the [Entry]. */
@@ -263,10 +262,10 @@ class TypeChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent) {
         val keyIndex: Int,
 
         /** The value of this resource entry, if this is not a complex entry. Else, null. */
-        var value: ResourceValue?,
+        var value: BinaryResourceValue?,
 
         /** The extra values in this resource entry if this [isComplex]. */
-        val values: MutableMap<Int, ResourceValue>,
+        val values: MutableMap<Int, BinaryResourceValue>,
 
         /**
          * Entry into [PackageChunk] that is the parent [Entry] to this entry.
@@ -312,10 +311,10 @@ class TypeChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent) {
                 parentEntry = buffer.getInt()
                 val valueCount = buffer.getInt()
                 for (i in 0 until valueCount) {
-                    values[buffer.getInt()] = ResourceValue(buffer)
+                    values[buffer.getInt()] = BinaryResourceValue(buffer)
                 }
             } else {
-                value = ResourceValue(buffer)
+                value = BinaryResourceValue(buffer)
             }
         }
 
@@ -325,7 +324,7 @@ class TypeChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent) {
 
         /** The total number of bytes that this [Entry] takes up. */
         val size: Int
-            get() = headerSize + if (isComplex) values.size * MAPPING_SIZE else ResourceValue.SIZE
+            get() = headerSize + if (isComplex) values.size * MAPPING_SIZE else BinaryResourceValue.SIZE
 
         /** The key name identifying this resource entry. */
         val key: String
@@ -350,7 +349,7 @@ class TypeChunk(buffer: ByteBuffer, parent: Chunk?) : Chunk(buffer, parent) {
             const val FLAG_PUBLIC = 1 shl 1
 
             /** Size of a single resource id + value mapping entry. */
-            private const val MAPPING_SIZE = 4 + ResourceValue.SIZE
+            private const val MAPPING_SIZE = 4 + BinaryResourceValue.SIZE
 
             /** Size of a simple resource  */
             const val SIMPLE_HEADERSIZE = 8

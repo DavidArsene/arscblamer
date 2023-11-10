@@ -24,7 +24,7 @@ import java.nio.ByteOrder
 import java.util.*
 
 /** Given an arsc file, maps the contents of the file. */
-class ResourceFile(buffer: ByteBuffer) : SerializableResource() {
+class BinaryResourceFile(buffer: ByteBuffer) : SerializableResource() {
 
     init {
         buffer.order(ByteOrder.LITTLE_ENDIAN)
