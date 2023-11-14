@@ -48,7 +48,8 @@ abstract class Chunk protected constructor(
         TABLE_TYPE_SPEC(0x0202),
         TABLE_LIBRARY(0x0203),
         TABLE_OVERLAYABLE(0x204),
-        TABLE_OVERLAYABLE_POLICY(0x205);
+        TABLE_OVERLAYABLE_POLICY(0x205),
+        TABLE_STAGED_ALIAS(0x206);
 
         companion object {
             private val map = entries.associateBy(Type::code)
