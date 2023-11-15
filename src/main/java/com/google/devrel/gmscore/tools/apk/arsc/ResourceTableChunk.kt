@@ -94,6 +94,17 @@ class ResourceTableChunk(buffer: ByteBuffer, parent: Chunk?) : ChunkWithChunks(b
         }
     }
 
+    /** Returns the [TypeChunk]s for the given `packageName`. */
+    fun getTypeChunksForPackage(packageName: String) =
+        _packages.filter { it.packageName == packageName }.flatMap { it.typeChunks }
+
+    /** Returns the [TypeChunk]s for the given `packageId`. */
+    fun getTypeChunksForPackage(id: Int) = _packages.filter { it.id == id }.flatMap { it.typeChunks }
+
+    /** Returns all the [TypeChunk]s from all packages. */
+    val typeChunks: Collection<TypeChunk>
+        get() = _packages.flatMap { it.typeChunks }
+
     /** Returns the packages contained in this resource table. */
     val packages: Collection<PackageChunk>
         get() = Collections.unmodifiableCollection(_packages)
