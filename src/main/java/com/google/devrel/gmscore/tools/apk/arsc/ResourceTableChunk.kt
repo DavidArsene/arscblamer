@@ -33,7 +33,7 @@ class ResourceTableChunk(buffer: ByteBuffer, parent: Chunk?) : ChunkWithChunks(b
         private set
 
     /** The packages contained in this resource table. */
-    private val _packages: MutableMap<String, PackageChunk> = HashMap()
+    private val _packages = LinkedHashSet<PackageChunk>()
 
     init {
         // packageCount. We ignore this, because we already know how many chunks we have.
@@ -41,7 +41,7 @@ class ResourceTableChunk(buffer: ByteBuffer, parent: Chunk?) : ChunkWithChunks(b
 
         for (chunk in chunks.values) {
             if (chunk is PackageChunk) {
-                _packages[chunk.packageName] = chunk
+                _packages.add(chunk)
             } else if (chunk is StringPoolChunk) {
                 stringPool = chunk
             }
@@ -51,7 +51,7 @@ class ResourceTableChunk(buffer: ByteBuffer, parent: Chunk?) : ChunkWithChunks(b
     /** Adds the [PackageChunk] to this table. */
     fun addPackageChunk(packageChunk: PackageChunk) {
         super.add(packageChunk)
-        _packages[packageChunk.packageName] = packageChunk
+        _packages.add(packageChunk)
     }
 
     /**
@@ -60,7 +60,7 @@ class ResourceTableChunk(buffer: ByteBuffer, parent: Chunk?) : ChunkWithChunks(b
      */
     fun deleteStrings(indexesToDelete: SortedSet<Int>) {
         val remappedIndexes = stringPool.deleteStrings(indexesToDelete)
-        for (packageChunk in packages) {
+        for (packageChunk in _packages) {
             for (typeChunk in packageChunk.typeChunks) {
                 val replacementEntries = TreeMap<Int, TypeChunk.Entry?>()
                 for ((index, chunkEntry) in typeChunk.entries) {
@@ -94,15 +94,9 @@ class ResourceTableChunk(buffer: ByteBuffer, parent: Chunk?) : ChunkWithChunks(b
         }
     }
 
-    /** Returns the package with the given `packageName`. Else, returns null. */
-    fun getPackage(packageName: String): PackageChunk? = _packages[packageName]
-
-    /** Returns the package with the given `packageId`. Else, returns null  */
-    fun getPackage(packageId: Int) = _packages.values.firstOrNull { chunk -> chunk.id == packageId }
-
     /** Returns the packages contained in this resource table. */
     val packages: Collection<PackageChunk>
-        get() = Collections.unmodifiableCollection(_packages.values)
+        get() = Collections.unmodifiableCollection(_packages)
 
     override fun getType() = Type.TABLE
 
