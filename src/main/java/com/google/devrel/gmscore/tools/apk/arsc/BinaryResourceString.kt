@@ -44,18 +44,18 @@ object BinaryResourceString {
      */
     fun decodeString(buffer: ByteBuffer, offset: Int, type: Type): String {
         var offset = offset
-        val length:Int
+        val length: Int
         val characterCount = decodeLength(buffer, offset, type)
         offset += computeLengthOffset(characterCount, type)
         // UTF-8 strings have 2 lengths: the number of characters, and then the encoding length.
         // UTF-16 strings, however, only have 1 length: the number of characters.
-        if(type == Type.UTF8) {
+        if (type == Type.UTF8) {
             length = decodeLength(buffer, offset, type)
             offset += computeLengthOffset(length, type)
         } else {
             length = characterCount shl 1
         }
-        return String(buffer.array(),offset, length, type.charset)
+        return String(buffer.array(), offset, length, type.charset)
     }
 
     /**
